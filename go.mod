@@ -1,4 +1,4 @@
-module github.com/geobuff/auth0-wrapper
+module github.com/geobuff/auth
 
 go 1.15
 
