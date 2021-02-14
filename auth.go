@@ -73,6 +73,8 @@ func GetJwtMiddleware(audience string, issuer string) *jwtmiddleware.JWTMiddlewa
 }
 
 func verifyAudience(m jwt.MapClaims, cmp string, req bool) bool {
+	fmt.Printf("%v", m)
+
 	fmt.Println("casting to array")
 	aud, ok := m["aud"].([]string)
 	if !ok {
