@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"crypto/subtle"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -49,7 +50,7 @@ type UserValidation struct {
 func GetJwtMiddleware(audience string, issuer string) *jwtmiddleware.JWTMiddleware {
 	return jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(audience, false)
+			checkAud := verifyAudience(token.Claims.(jwt.MapClaims), audience, false)
 			if !checkAud {
 				return token, errors.New("invalid audience")
 			}
@@ -69,6 +70,32 @@ func GetJwtMiddleware(audience string, issuer string) *jwtmiddleware.JWTMiddlewa
 		},
 		SigningMethod: jwt.SigningMethodRS256,
 	})
+}
+
+func verifyAudience(m jwt.MapClaims, cmp string, req bool) bool {
+	aud, ok := m["aud"].([]string)
+	if !ok {
+		strAud, ok := m["aud"].(string)
+		if !ok {
+			return false
+		}
+		aud = append(aud, strAud)
+	}
+
+	return verifyAud(aud[:1], cmp, req)
+}
+
+func verifyAud(aud []string, cmp string, required bool) bool {
+	if len(aud) == 0 {
+		return !required
+	}
+
+	for _, a := range aud {
+		if subtle.ConstantTimeCompare([]byte(a), []byte(cmp)) != 0 {
+			return true
+		}
+	}
+	return false
 }
 
 func getPemCert(token *jwt.Token, issuer string) (string, error) {
