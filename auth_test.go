@@ -81,7 +81,6 @@ func TestValidUser(t *testing.T) {
 		matchingUser  func(request *http.Request, identifier string, target string) (bool, error)
 		hasPermission func(up UserPermission) (bool, error)
 		token         string
-		userID        int
 		username      string
 		permission    string
 		want          int
@@ -94,7 +93,6 @@ func TestValidUser(t *testing.T) {
 			},
 			hasPermission: HasPermission,
 			token:         "",
-			userID:        1,
 			username:      "mrscrub",
 			permission:    "",
 			want:          http.StatusInternalServerError,
@@ -105,7 +103,6 @@ func TestValidUser(t *testing.T) {
 			matchingUser:  matchingUser,
 			hasPermission: func(up UserPermission) (bool, error) { return false, errors.New("test") },
 			token:         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpuNmd6ZnBxZDRZbU5hMUZabzFTSiJ9.eyJodHRwOi8vZ2VvYnVmZi5jb20vdXNlcm5hbWUiOiJtcnNjcnViIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZ2VvYnVmZi5hdS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWZjNmM5YWRiMTBkNmQwMDZmNjEwNTk2IiwiYXVkIjpbImh0dHBzOi8vZGV2LWdlb2J1ZmYtYXBpLmNvbSIsImh0dHBzOi8vZGV2LWdlb2J1ZmYuYXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwODc5Njk5NiwiZXhwIjoxNjA4ODgzMzk2LCJhenAiOiJpUXRrTmc2cHYwZzhsQXFFQUprUkpxMjFONzNzaG9UMSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJyZWFkOnNjb3JlcyIsInJlYWQ6dXNlcnMiLCJ3cml0ZTpsZWFkZXJib2FyZCIsIndyaXRlOnNjb3JlcyIsIndyaXRlOnVzZXJzIl19.YyQUeX1ttxPF2CUGOlE9m3dBBbi8kDbFXq7-2dld3YPctHJb_wgRxc10RFcyryLkSOdbWFdELoF0sDRh2miEYchdrit7Ac0rTufWkn7pfv4SV8e9yYmlCV-cVBtDjKPDQP2e7TDSuoXOOVBcbdlhyro524bEqAibzWPqfh5apn1HeP_tvbHqdZRdrRZOVu1W89f7uaoua9-DmBASSgeO3KixLYREHAPAI2kFgt2YmWZ-Y_474A2KoIAJgwrbhG094sbDiBuuhRRl2GUURLqbxRB0gIRS1ut4J2DGvkr59t5ev789XIWc4zI3rHvBLJ0hGDyi66Ip8TZW3D-pkNCl6Q",
-			userID:        1,
 			username:      "testing",
 			permission:    "",
 			want:          http.StatusInternalServerError,
@@ -116,7 +113,6 @@ func TestValidUser(t *testing.T) {
 			matchingUser:  matchingUser,
 			hasPermission: HasPermission,
 			token:         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpuNmd6ZnBxZDRZbU5hMUZabzFTSiJ9.eyJodHRwOi8vZ2VvYnVmZi5jb20vdXNlcm5hbWUiOiJtcnNjcnViIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZ2VvYnVmZi5hdS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWZjNmM5YWRiMTBkNmQwMDZmNjEwNTk2IiwiYXVkIjpbImh0dHBzOi8vZGV2LWdlb2J1ZmYtYXBpLmNvbSIsImh0dHBzOi8vZGV2LWdlb2J1ZmYuYXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwODgwNDEwMywiZXhwIjoxNjA4ODkwNTAzLCJhenAiOiJpUXRrTmc2cHYwZzhsQXFFQUprUkpxMjFONzNzaG9UMSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6W119.IGUKHVYhGsH3BnpwzYUTVc-hTQjy8FdQT5OeRrR9UIDFpqgVgG1AHJ4yXiaztyva0rXGgA-YsWOJCL9YlpA-7EcBbCT2IomdJT8FbsoyZVRH5XlWJ3MVXaB5_mMdXeHIeEK-TeZZGYKyoWBrClOmvTjHA2Z1-dK4A9ScEUwhYCVQ7usnueiwza-dvNeCzOecnhVRdcvKv4FGBqrjjPeeYlsgL5n7htNVvJKss9wUlN8ucWdJX4VK3-juXOp3PBWsjaEdwBQpWcnHw8MP4lTZ10Xs5AqCt3LktEvarsia4qdeytFPs2jaVpT4Sm_U9nOCae7wKnDa0_nOdWuwsNDyVg",
-			userID:        1,
 			username:      "testing",
 			permission:    "read:scores",
 			want:          http.StatusUnauthorized,
@@ -127,7 +123,6 @@ func TestValidUser(t *testing.T) {
 			matchingUser:  matchingUser,
 			hasPermission: HasPermission,
 			token:         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpuNmd6ZnBxZDRZbU5hMUZabzFTSiJ9.eyJodHRwOi8vZ2VvYnVmZi5jb20vdXNlcm5hbWUiOiJtcnNjcnViIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZ2VvYnVmZi5hdS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWZjNmM5YWRiMTBkNmQwMDZmNjEwNTk2IiwiYXVkIjpbImh0dHBzOi8vZGV2LWdlb2J1ZmYtYXBpLmNvbSIsImh0dHBzOi8vZGV2LWdlb2J1ZmYuYXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwODc5Njk5NiwiZXhwIjoxNjA4ODgzMzk2LCJhenAiOiJpUXRrTmc2cHYwZzhsQXFFQUprUkpxMjFONzNzaG9UMSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJyZWFkOnNjb3JlcyIsInJlYWQ6dXNlcnMiLCJ3cml0ZTpsZWFkZXJib2FyZCIsIndyaXRlOnNjb3JlcyIsIndyaXRlOnVzZXJzIl19.YyQUeX1ttxPF2CUGOlE9m3dBBbi8kDbFXq7-2dld3YPctHJb_wgRxc10RFcyryLkSOdbWFdELoF0sDRh2miEYchdrit7Ac0rTufWkn7pfv4SV8e9yYmlCV-cVBtDjKPDQP2e7TDSuoXOOVBcbdlhyro524bEqAibzWPqfh5apn1HeP_tvbHqdZRdrRZOVu1W89f7uaoua9-DmBASSgeO3KixLYREHAPAI2kFgt2YmWZ-Y_474A2KoIAJgwrbhG094sbDiBuuhRRl2GUURLqbxRB0gIRS1ut4J2DGvkr59t5ev789XIWc4zI3rHvBLJ0hGDyi66Ip8TZW3D-pkNCl6Q",
-			userID:        1,
 			username:      "mrscrub",
 			permission:    "",
 			want:          200,
@@ -138,7 +133,6 @@ func TestValidUser(t *testing.T) {
 			matchingUser:  matchingUser,
 			hasPermission: HasPermission,
 			token:         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpuNmd6ZnBxZDRZbU5hMUZabzFTSiJ9.eyJodHRwOi8vZ2VvYnVmZi5jb20vdXNlcm5hbWUiOiJtcnNjcnViIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZ2VvYnVmZi5hdS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWZjNmM5YWRiMTBkNmQwMDZmNjEwNTk2IiwiYXVkIjpbImh0dHBzOi8vZGV2LWdlb2J1ZmYtYXBpLmNvbSIsImh0dHBzOi8vZGV2LWdlb2J1ZmYuYXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwODc5Njk5NiwiZXhwIjoxNjA4ODgzMzk2LCJhenAiOiJpUXRrTmc2cHYwZzhsQXFFQUprUkpxMjFONzNzaG9UMSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJyZWFkOnNjb3JlcyIsInJlYWQ6dXNlcnMiLCJ3cml0ZTpsZWFkZXJib2FyZCIsIndyaXRlOnNjb3JlcyIsIndyaXRlOnVzZXJzIl19.YyQUeX1ttxPF2CUGOlE9m3dBBbi8kDbFXq7-2dld3YPctHJb_wgRxc10RFcyryLkSOdbWFdELoF0sDRh2miEYchdrit7Ac0rTufWkn7pfv4SV8e9yYmlCV-cVBtDjKPDQP2e7TDSuoXOOVBcbdlhyro524bEqAibzWPqfh5apn1HeP_tvbHqdZRdrRZOVu1W89f7uaoua9-DmBASSgeO3KixLYREHAPAI2kFgt2YmWZ-Y_474A2KoIAJgwrbhG094sbDiBuuhRRl2GUURLqbxRB0gIRS1ut4J2DGvkr59t5ev789XIWc4zI3rHvBLJ0hGDyi66Ip8TZW3D-pkNCl6Q",
-			userID:        1,
 			username:      "testing",
 			permission:    "read:scores",
 			want:          200,
@@ -159,7 +153,6 @@ func TestValidUser(t *testing.T) {
 
 			uv := UserValidation{
 				Request:    request,
-				UserID:     tc.userID,
 				Permission: tc.permission,
 				Identifier: "http://geobuff.com/username",
 				Key:        tc.username,

@@ -39,7 +39,6 @@ type UserPermission struct {
 // UserValidation is the data used in ValidUser.
 type UserValidation struct {
 	Request    *http.Request
-	UserID     int
 	Permission string
 	Identifier string
 	Key        string
