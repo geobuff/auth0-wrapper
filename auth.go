@@ -44,8 +44,8 @@ type UserValidation struct {
 	Key        string
 }
 
-// GetJwtMiddleware returns the Auth0 middleware instance we will use to handle authorized endpoints.
-func GetJwtMiddleware(audience string, issuer string) *jwtmiddleware.JWTMiddleware {
+// GetJwtMiddleware returns the Auth0 middleware used to handle authorized endpoints.
+func GetJwtMiddleware(audience, issuer string) *jwtmiddleware.JWTMiddleware {
 	return jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			aud := token.Claims.(jwt.MapClaims)["aud"].([]interface{})
@@ -108,7 +108,7 @@ func getPemCert(token *jwt.Token, issuer string) (string, error) {
 	return cert, nil
 }
 
-// HasPermission confirms the user making a request has the correct permissions to complete the action.
+// HasPermission confirms the requester has the correct permission to complete the action.
 var HasPermission = func(up UserPermission) (bool, error) {
 	permissions, err := getPermissions(up.Request)
 	if err != nil {
@@ -117,8 +117,7 @@ var HasPermission = func(up UserPermission) (bool, error) {
 	return permissionPresent(permissions, up.Permission), nil
 }
 
-// ValidUser confirms the user making a request is either making changes to their own data or has the correct
-// permissions to complete the action.
+// ValidUser confirms the requester is either making changes to their own data or has the correct permission to complete the action.
 var ValidUser = func(uv UserValidation) (int, error) {
 	if matchingUser, err := matchingUser(uv.Request, uv.Identifier, uv.Key); err != nil {
 		return http.StatusInternalServerError, err
