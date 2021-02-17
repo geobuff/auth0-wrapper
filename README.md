@@ -1,4 +1,7 @@
 # geobuff/auth
+[![Go Report Card](https://goreportcard.com/badge/github.com/geobuff/auth)](https://goreportcard.com/report/github.com/geobuff/auth)
+[![Go Reference](https://pkg.go.dev/badge/github.com/geobuff/auth.svg)](https://pkg.go.dev/github.com/geobuff/auth)
+
 A package to make it easier to handle Auth0 authorization and check whether a user is valid or has permissions based on API scopes.
 
 ## Setup
@@ -18,9 +21,7 @@ go get github.com/geobuff/auth
 
 ## Usage
 
-### GetJwtMiddleware(audience, issuer string) *jwtmiddleware.JWTMiddleware
-Returns the Auth0 middleware used to handle authorized endpoints.
-
+### JWT Middleware
 ```
 package main
 
@@ -44,9 +45,7 @@ func main() {
 }
 ```
 
-### HasPermission(up UserPermission) (bool, error)
-Confirms the user making a request has the correct permissions to complete the action.
-
+### User Has Permission?
 ```
 package users
 
@@ -75,9 +74,7 @@ var GetUsers = http.HandlerFunc(func(writer http.ResponseWriter, request *http.R
 })
 ```
 
-### ValidUser(uv UserValidation) (int, error)
-Confirms the user making a request is either making changes to their own data or has the correct permissions to complete the action.
-
+### Valid User?
 ```
 package scores
 
@@ -103,5 +100,4 @@ var CreateScore = http.HandlerFunc(func(writer http.ResponseWriter, request *htt
 
   // User is valid...
 })
-
 ```
