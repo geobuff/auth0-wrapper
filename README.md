@@ -1,4 +1,5 @@
 # geobuff/auth
+![Travis (.com) branch](https://img.shields.io/travis/com/geobuff/auth/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/geobuff/auth)](https://goreportcard.com/report/github.com/geobuff/auth)
 [![Go Reference](https://pkg.go.dev/badge/github.com/geobuff/auth.svg)](https://pkg.go.dev/github.com/geobuff/auth)
 
@@ -6,7 +7,7 @@ A package to make it easier to handle Auth0 authorization and check whether a us
 
 ## Setup
  - Create [scopes](https://auth0.com/docs/scopes/api-scopes) for your API in Auth0.
- - If using ValidUser, add a [custom claims rule](https://auth0.com/docs/scopes/sample-use-cases-scopes-and-claims#add-custom-claims-to-a-token) in Auth0 to include your key in the access token returned to the user:
+ - If using [ValidUser](#valid-user), add a [custom claims rule](https://auth0.com/docs/scopes/sample-use-cases-scopes-and-claims#add-custom-claims-to-a-token) in Auth0 to include your key in the access token returned to the user:
  ```
  function (user, context, callback) {
   context.accessToken['http://example.com/username'] = user.username;
@@ -22,6 +23,8 @@ go get github.com/geobuff/auth
 ## Usage
 
 ### JWT Middleware
+Use the middleware to enforce authorization on routes:
+
 ```
 package main
 
@@ -45,7 +48,9 @@ func main() {
 }
 ```
 
-### User Has Permission?
+### Has Permission?
+Ensure a requester has a specified permission before performing an action:
+
 ```
 package users
 
@@ -75,6 +80,8 @@ var GetUsers = http.HandlerFunc(func(writer http.ResponseWriter, request *http.R
 ```
 
 ### Valid User?
+Confirm the requester is either making changes to their own data or has the correct permission to complete the action. Note that the UserValidation 'Identifier' value below is the same as we specified in our custom claims rule in [Setup](#setup).
+
 ```
 package scores
 
@@ -86,11 +93,13 @@ include (
 )
 
 var CreateScore = http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+  user := getUser(request)
+  
   uv := auth.UserValidation{
     Request:    request,
     Permission: "write_scores",
     Identifier: "http://example.com/username",
-    Key:        "example_username",
+    Key:        user.username,
   }
 
   if code, err := auth.ValidUser(uv); err != nil {
