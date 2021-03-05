@@ -28,7 +28,7 @@ Use the middleware to enforce authorization on routes:
 ```
 package main
 
-include (
+import (
   "net/http"
   
   "github.com/geobuff/api/users"
@@ -54,7 +54,7 @@ Ensure a requester has a specified permission before performing an action:
 ```
 package users
 
-include (
+import (
   "fmt"
   "net/http"
   
@@ -85,7 +85,7 @@ Confirm the requester is either making changes to their own data or has the corr
 ```
 package scores
 
-include (
+import (
   "fmt"
   "net/http"
   
