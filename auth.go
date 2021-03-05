@@ -184,7 +184,7 @@ func getIdentifier(request *http.Request, identifier string) (string, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		return fmt.Sprintf("%s", claims[identifier]), nil
+		return fmt.Sprint(claims[identifier]), nil
 	}
 	return "", errors.New("failed to parse claims from token")
 }
